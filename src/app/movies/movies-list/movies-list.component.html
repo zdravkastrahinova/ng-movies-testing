@@ -1,0 +1,12 @@
+<h1>Movies list</h1>
+
+<div *ngIf="selectedMovie">
+  Selected movie: {{ selectedMovie.title }}
+</div>
+
+<section>
+  <app-movie-item *ngFor="let m of movies"
+                  [movie]="m"
+                  (clicked)="onItemClicked($event)"
+                  class="article"></app-movie-item>
+</section>
