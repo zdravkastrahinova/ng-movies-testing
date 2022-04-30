@@ -11,8 +11,13 @@ export class MovieItemComponent {
   @Input() movie: Movie;
 
   @Output() clicked = new EventEmitter<Movie>();
+  @Output() deleted = new EventEmitter<number>();
 
   onClick(): void {
     this.clicked.emit(this.movie);
+  }
+
+  onDelete(): void {
+    this.deleted.emit(this.movie.id);
   }
 }

@@ -4,9 +4,14 @@
   Selected movie: {{ selectedMovie.title }}
 </div>
 
+<div>
+  <a routerLink="/movies/add">Add new</a>
+</div>
+
 <section>
   <app-movie-item *ngFor="let m of movies"
                   [movie]="m"
                   (clicked)="onItemClicked($event)"
+                  (deleted)="onItemDeleted($event)"
                   class="article"></app-movie-item>
 </section>

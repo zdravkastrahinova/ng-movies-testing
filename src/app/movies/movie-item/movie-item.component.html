@@ -9,5 +9,11 @@
     <button type="button"
             class="button"
             (click)="onClick()">Mark as favorite</button>
+
+    <a class="button" [routerLink]="['/movies/edit', movie.id]">Edit</a>
+
+    <button type="button"
+            class="button"
+            (click)="onDelete()">Delete</button>
   </footer>
 </article>

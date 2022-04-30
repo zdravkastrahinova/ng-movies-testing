@@ -1,0 +1,22 @@
+<div>
+
+  <h4>Add new movie</h4>
+
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div>
+      <input type="text"
+             placeholder="Title"
+             formControlName="title">
+    </div>
+
+    <div>
+      <textarea cols="21" rows="10"
+                placeholder="Description"
+                formControlName="description"></textarea>
+    </div>
+
+    <button type="submit">
+      Save
+    </button>
+  </form>
+</div>
