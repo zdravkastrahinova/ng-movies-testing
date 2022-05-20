@@ -59,14 +59,7 @@ export class MovieFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let request$;
-    if (this.formGroup.value.id) {
-      request$ = this.moviesService.put$(this.formGroup.value);
-    } else {
-      request$ = this.moviesService.post$(this.formGroup.value);
-    }
-
-    request$.subscribe({
+    this.moviesService.save$(this.formGroup.value).subscribe({
       next: () => {
         this.router.navigate(['/']);
       }

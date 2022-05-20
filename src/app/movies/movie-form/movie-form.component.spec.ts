@@ -5,6 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MoviesService } from '../../services/movies.service';
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 describe('MovieFormComponent', () => {
   let component: MovieFormComponent;
@@ -17,10 +19,17 @@ describe('MovieFormComponent', () => {
         RouterTestingModule,
         HttpClientTestingModule
       ],
-      declarations: [ MovieFormComponent ],
-      providers: [MoviesService]
+      declarations: [MovieFormComponent],
+      providers: [
+        {
+          provide: MoviesService,
+          useClass: class {
+            save$ = jasmine.createSpy('save$').and.returnValue(of({}));
+          }
+        }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -70,5 +79,52 @@ describe('MovieFormComponent', () => {
 
     // assert
     expect(component.formGroup.valid).toBeTrue();
+  });
+
+  it('title control should be invalid if empty (required validator)', () => {
+    const titleControl = component.formGroup.get('title');
+    const errors = titleControl.errors || {};
+
+    expect(errors.required).toBeTrue();
+  });
+
+  it('title control should be invalid if length is less that 3', () => {
+    const titleControl = component.formGroup.get('title');
+
+    titleControl.setValue('v');
+    const errors = titleControl.errors || {};
+
+    expect(errors.minlength).toBeTruthy();
+    expect(errors.minlength.requiredLength).toBe(3);
+    expect(errors.minlength.actualLength).toBe(1);
+  });
+
+  it('navigate to list when submitting after calling onSubmit()', () => {
+    const movieToAdd = {
+      id: null,
+      title: 'Movie to Add',
+      description: ''
+    };
+
+    component.formGroup.setValue(movieToAdd);
+    expect(component.formGroup.valid).toBeTrue();
+
+    const router = TestBed.inject(Router);
+    const spy = spyOn(router, 'navigate');
+
+    component.onSubmit();
+
+    expect(spy).toHaveBeenCalledWith(['/']);
+  });
+
+  it('return (exit) when form is invalid after calling onSubmit()', () => {
+    expect(component.formGroup.valid).toBeFalse();
+
+    const router = TestBed.inject(Router);
+    const spy = spyOn(router, 'navigate');
+
+    component.onSubmit();
+
+    expect(spy).not.toHaveBeenCalled();
   });
 });
