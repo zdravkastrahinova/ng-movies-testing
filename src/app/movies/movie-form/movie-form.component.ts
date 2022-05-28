@@ -4,7 +4,7 @@ import { MoviesService } from '../../services/movies.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { Movie } from '../../models/movie.model';
-import { Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-movie-form',
@@ -33,7 +33,7 @@ export class MovieFormComponent implements OnInit, OnDestroy {
         const id = params.id;
 
         if (!id) {
-          return null;
+          return of(null);
         }
 
         return this.moviesService.getMovie$(id);
@@ -59,14 +59,7 @@ export class MovieFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let request$;
-    if (this.formGroup.value.id) {
-      request$ = this.moviesService.put$(this.formGroup.value);
-    } else {
-      request$ = this.moviesService.post$(this.formGroup.value);
-    }
-
-    request$.subscribe({
+    this.moviesService.save$(this.formGroup.value).subscribe({
       next: () => {
         this.router.navigate(['/']);
       }

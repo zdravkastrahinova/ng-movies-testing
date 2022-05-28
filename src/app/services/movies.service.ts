@@ -21,15 +21,23 @@ export class MoviesService {
     return this.http.get<Movie>(`${this.url}/${id}`);
   }
 
-  post$(body: Movie): Observable<Movie> {
-    return this.http.post<Movie>(this.url, body);
-  }
+  save$(body: Movie): Observable<Movie> {
+    if (body.id) {
+      return this.put$(body);
+    }
 
-  put$(body: Movie): Observable<Movie> {
-    return this.http.put<Movie>(`${this.url}/${body.id}`, body);
+    return this.post$(body);
   }
 
   delete$(id: number): Observable<undefined> {
     return this.http.delete<undefined>(`${this.url}/${id}`);
+  }
+
+  private post$(body: Movie): Observable<Movie> {
+    return this.http.post<Movie>(this.url, body);
+  }
+
+  private put$(body: Movie): Observable<Movie> {
+    return this.http.put<Movie>(`${this.url}/${body.id}`, body);
   }
 }
