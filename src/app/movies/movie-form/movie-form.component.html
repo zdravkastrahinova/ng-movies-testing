@@ -1,6 +1,8 @@
 <div>
 
-  <h4>Add new movie</h4>
+  <h4 data-test-selector="form-title">
+    {{ formGroup?.value?.id ? 'Update movie' : 'Add new movie' }}
+  </h4>
 
   <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <div>
@@ -15,8 +17,15 @@
                 formControlName="description"></textarea>
     </div>
 
-    <button type="submit">
+    <button type="submit"
+            data-test-selector="button-save">
       Save
     </button>
+
+    <a style="margin-left: 1rem"
+       data-test-selector="button-back"
+       routerLink="/">
+      Back to list
+    </a>
   </form>
 </div>
